@@ -1,0 +1,7 @@
+node_modules/
+.next/
+segredos/
+contas/*/videos/
+contas/*/enviados/
+contas/*/baixados.txt
+*.log

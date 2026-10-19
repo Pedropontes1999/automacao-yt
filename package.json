@@ -1,0 +1,20 @@
+{
+  "name": "yt-automacao",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Baixa videos em massa (yt-dlp) e posta/agenda no YouTube (Data API).",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "baixar": "node baixar.js",
+    "autenticar": "node auth.js",
+    "postar": "node postar.js"
+  },
+  "dependencies": {
+    "googleapis": "^144.0.0",
+    "next": "^16.4.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  }
+}

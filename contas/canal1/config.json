@@ -1,0 +1,7 @@
+{
+  "idioma": "pt",
+  "posts_por_vez": 1,
+  "intervalo_horas": 24,
+  "privacidade": "private",
+  "titulo_padrao": "{nome}"
+}
