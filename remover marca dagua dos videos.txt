@@ -1,0 +1,42 @@
+REMOVER A MARCA D'AGUA "HISTORIAS GEEK" DOS VIDEOS
+==================================================
+(anotado em 19/10/2026)
+
+SITUACAO
+- As 259 capas (marketing\fotos de capa) ja estao prontas: cor ajustada, texto
+  trocado e as duas marcas "Historias Geek" removidas com IA (LaMa).
+  Os originais estao em marketing\fotos de capa\originais.
+- Os 259 videos (contas\canal1\videos, 18 GB, ~6,5 h de video) AINDA TEM a marca.
+  A marca fica sempre no mesmo lugar: logo abaixo da palavra da legenda
+  (videos 1440x2560, caixa x 420-1020, y 1488-1638).
+
+TESTES FEITOS (trecho de 12 s do video da Black Cat)
+- Opcao A - IA (LaMa): apaga a marca e redesenha o fundo. Melhor resultado.
+- Opcao C - faixa escura desfocada por cima da marca. Nao treme, mas aparece.
+- Os trechos de teste ficaram em contas\canal1\teste marca dagua (nao vao pro git).
+
+TEMPO / CUSTO
+- Opcao A no PC (CPU Ryzen 7 5700X3D): ~1,5 s por quadro -> ~12-13 DIAS no total.
+  A placa AMD RX 7600 XT NAO roda esse modelo (DirectML da erro).
+- Opcao C no PC: ~11 horas no total, de graca.
+- OPCAO ESCOLHIDA PRA AVALIAR: Opcao A em placa NVIDIA alugada na nuvem
+  * Sites: RunPod (runpod.io) ou Vast.ai
+  * Placa: RTX 4090, ~US$ 0,35-0,70 por hora (conferir preco atual)
+  * ~700 mil quadros, ~20 quadros/s por placa -> ~10 h de placa
+  * 1 placa: ~10 h | 4 placas em paralelo: ~2-3 h (mesmo preco)
+  * Custo estimado: ~US$ 5-15 no total (geralmente credito minimo de US$ 10)
+  * Ainda tem o tempo de subir os 18 GB e baixar os videos prontos
+
+PASSOS NA NUVEM
+1. Criar conta no RunPod ou Vast.ai e colocar credito.
+2. Alugar maquina com RTX 4090 (imagem com Python + CUDA) e instalar o ffmpeg.
+3. pip install numpy opencv-python-headless onnxruntime-gpu
+4. Baixar o modelo pra ferramentas\marca-dagua\model\lama_fp32.onnx:
+   https://huggingface.co/Carve/LaMa-ONNX/resolve/main/lama_fp32.onnx
+5. No script, trocar o provider pra ['CUDAExecutionProvider', 'CPUExecutionProvider'].
+6. Subir os videos (do Drive) e rodar, um por video:
+   python ferramentas/marca-dagua/remover_marca_video.py <entrada.mp4> <saida.mp4> A
+   (pra testar um trecho: acrescentar no final o inicio e a duracao, ex: 0 12)
+   Opcao C: trocar o "A" por "C".
+7. Conferir alguns videos e baixar os prontos.
+Obs: o script grava em H.264 (crf 18) e copia o audio original.

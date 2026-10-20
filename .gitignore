@@ -7,3 +7,6 @@ contas/*/baixados.txt
 *.log
 contas/*/progresso.json
 contas/*/fila_upload.json
+contas/*/teste marca dagua/
+ferramentas/marca-dagua/model/
+ferramentas/marca-dagua/saida/
