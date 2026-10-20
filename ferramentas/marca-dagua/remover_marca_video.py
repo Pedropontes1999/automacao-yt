@@ -11,7 +11,9 @@ CX0, CY0, CS = 336, 1178, 768
 
 def lama_session():
     ort.set_default_logger_severity(3)
-    return ort.InferenceSession(os.path.join(HERE, 'model', 'lama_fp32.onnx'), providers=['CPUExecutionProvider'])
+    # GPU_MARCA_DAGUA=1 usa CUDA (maquina alugada com GPU NVIDIA); sem a env var, roda na CPU.
+    providers = ['CUDAExecutionProvider', 'CPUExecutionProvider'] if os.environ.get('GPU_MARCA_DAGUA') == '1' else ['CPUExecutionProvider']
+    return ort.InferenceSession(os.path.join(HERE, 'model', 'lama_fp32.onnx'), providers=providers)
 
 def main():
     src, dst, mode = sys.argv[1], sys.argv[2], sys.argv[3]
