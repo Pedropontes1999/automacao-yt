@@ -61,7 +61,32 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ conta }),
       });
-      carregarProgresso();
+      // Zera o painel de progresso na hora (sem esperar o proximo polling).
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+      setProgresso(null);
+      carregarStatus();
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
+  async function removerDaFila(itens) {
+    const msg = itens
+      ? 'Tirar esse video da fila e apagar o arquivo?'
+      : `Limpar a fila toda e apagar os ${status?.totalPendentes} video(s)?`;
+    if (!confirm(msg)) return;
+    try {
+      const res = await fetch('/api/fila', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(itens ? { conta, itens } : { conta }),
+      });
+      const data = await res.json();
+      if (data.erro) alert(data.erro);
+      carregarStatus();
     } catch (e) {
       alert(e.message);
     }
@@ -156,12 +181,13 @@ export default function Home() {
         </div>
       </div>
 
-      {progresso && (progresso.emAndamento || progresso.logs?.length > 0) && (
+      {progresso && progresso.fase !== 'cancelado' && (progresso.emAndamento || progresso.logs?.length > 0) && (
         <div className="panel">
           <h3 style={{ fontSize: 14, marginTop: 0 }}>
             {progresso.fase === 'contando' && 'Contando quantos videos tem...'}
             {progresso.fase === 'baixando' && 'Baixando...'}
             {progresso.fase === 'concluido' && 'Download concluido'}
+            {progresso.fase === 'bloqueado' && 'Parado: YouTube pediu login (anti-robo)'}
           </h3>
 
           {total != null && (
@@ -222,10 +248,25 @@ export default function Home() {
 
           {status.pendentes?.length > 0 && (
             <>
-              <h3 style={{ fontSize: 14, marginTop: 16 }}>Fila de upload</h3>
+              <div className="fila-topo">
+                <h3 style={{ fontSize: 14 }}>Fila de upload</h3>
+                <button className="secundario" onClick={() => removerDaFila(null)} disabled={emAndamento}>
+                  Limpar fila
+                </button>
+              </div>
               <ul className="lista">
                 {status.pendentes.map((p) => (
-                  <li key={p}>{p}</li>
+                  <li key={p} className="fila-item">
+                    <span>{p}</span>
+                    <button
+                      className="remover"
+                      title="Tirar da fila e apagar o arquivo"
+                      onClick={() => removerDaFila([p])}
+                      disabled={emAndamento}
+                    >
+                      ✕
+                    </button>
+                  </li>
                 ))}
               </ul>
             </>

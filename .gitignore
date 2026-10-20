@@ -5,3 +5,5 @@ contas/*/videos/
 contas/*/enviados/
 contas/*/baixados.txt
 *.log
+contas/*/progresso.json
+contas/*/fila_upload.json

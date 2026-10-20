@@ -149,6 +149,36 @@ ul.lista li {
   color: var(--muted);
 }
 
+.fila-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.fila-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fila-item span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+button.remover {
+  background: transparent;
+  color: var(--muted);
+  padding: 2px 8px;
+  font-size: 13px;
+}
+
+button.remover:hover:not(:disabled) {
+  color: #ff6b6b;
+}
+
 .badge {
   display: inline-block;
   font-size: 11px;
