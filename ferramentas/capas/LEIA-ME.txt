@@ -1,0 +1,31 @@
+EDITOR DAS CAPAS (cor + texto + remocao da marca "Historias Geek")
+================================================================
+
+O que faz em cada capa (1280x720, faixa central x 438-842):
+- Ajuste leve de cor (alterna entre 3 tons).
+- Troca a palavra da legenda por um sinonimo (spec.py / spec2.py, CAP)
+  ou reescreve o titulo grande de 3 linhas (TITLE).
+- Remove o logo do canto e a escrita "HISTORIAS GEEK" com IA (LaMa).
+- Recria o fundo escurecido dos lados a partir da faixa editada.
+
+Arquivos
+- edit.py      script principal
+- spec.py      textos novos do lote 1 (175 capas)  -> usa ocr.json
+- spec2.py     textos novos do lote 2 (84 capas)   -> usa ocr2.json
+- ocr.py       detecta o texto das capas (gera o json com as posicoes)
+- cmp.py       monta imagem de antes/depois pra revisar
+- fonts/       fontes usadas (Google Fonts, licenca OFL/Apache)
+- model/       (fora do git) modelo da IA, baixar em:
+               https://huggingface.co/Carve/LaMa-ONNX/resolve/main/lama_fp32.onnx
+
+Instalar
+  python -m venv venv
+  venv\Scripts\python -m pip install numpy opencv-contrib-python-headless pillow onnxruntime rapidocr-onnxruntime
+
+Usar (le as capas de marketing\fotos de capa\originais, caminho em SRC no edit.py)
+  venv\Scripts\python edit.py <pasta_saida>              lote 1
+  set BATCH=2 && venv\Scripts\python edit.py <pasta_saida>   lote 2
+  (pode passar numeros no final pra processar so algumas: edit.py saida 3 10 25)
+
+Capas novas: rodar ocr.py <pasta> <novo.json>, criar um spec3.py com os textos
+novos (indice = posicao do arquivo no json) e apontar o edit.py pra eles.
